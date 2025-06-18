@@ -5,16 +5,15 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func RegisterRouter(r *mux.Router) {
+func Router(router *mux.Router) {
 	// User
-	r.HandleFunc("/users", controllers.GetUsers).Methods("GET")
-	r.HandleFunc("/users", controllers.CreateUsers).Methods("POST")
-	// r.HandleFunc("/login", controllers.Login).Methods("POST")
+	router.HandleFunc("/users", controllers.GetUsers).Methods("GET")
+
+	// Authentication
+	router.HandleFunc("/users", controllers.Register).Methods("POST")
+	// router.HandleFunc("/login", controllers.Login).Methods("POST")
 
 	// Invoice
-	// r.HandleFunc("/invoices", controllers.GetInvoices).Methods("GET")
-	// r.HandleFunc("/invoices/{id}", controllers.GetInvoiceByID).Methods("GET")
-	// r.HandleFunc("/invoices", controllers.CreateInvoice).Methods("POST")
-	// r.HandleFunc("/invoices/{id}", controllers.UpdateInvoice).Methods("PUT")
-	// r.HandleFunc("/invoices/{id}", controllers.DeleteInvoice).Methods("DELETE")
+	// router.HandleFunc("/invoices", controllers.GetInvoices).Methods("GET")
+
 }
