@@ -18,7 +18,7 @@ func GenerateJWT(userID uint) (string, error) {
 }
 
 func ParseToken(tokenStr string) (jwt.MapClaims, error) {
-	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (any, error) {
 		return jwtKey, nil
 	})
 

@@ -8,18 +8,22 @@ import (
 )
 
 func Router(router *mux.Router) {
-	// Authentication
+	// Public routes
 	router.HandleFunc("/register", controllers.Register).Methods("POST")
 	router.HandleFunc("/login", controllers.Login).Methods("POST")
 
-	// Middleware
+	// Middleware / Protected routes
 	secured := router.PathPrefix("/api").Subrouter()
 	secured.Use(middleware.Authorization)
 
-	// User
-	router.HandleFunc("/users", controllers.GetUsers).Methods("GET")
+	// User (secured)
+	secured.HandleFunc("/users", controllers.GetUsers).Methods("GET")
 
-	// Invoice
-	// router.HandleFunc("/invoices", controllers.GetInvoices).Methods("GET")
+	// Invoice (secured)
+	router.HandleFunc("/invoices", controllers.GetInvoices).Methods("GET")
+	router.HandleFunc("/invoices/{id}", controllers.GetInvoiceByID).Methods("GET")
+	router.HandleFunc("/invoices/", controllers.CreateInvoice).Methods("POST")
+	router.HandleFunc("/invoices/{id}", controllers.UpdateInvoice).Methods("PUT")
+	router.HandleFunc("/invoices/{id}", controllers.DeleteInvoice).Methods("DELETE")
 
 }
