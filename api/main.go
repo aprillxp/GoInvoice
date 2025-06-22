@@ -7,7 +7,9 @@ import (
 	"api/database"
 	"api/models"
 	"api/routes"
+
 	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
 )
 
 func main() {
@@ -16,7 +18,8 @@ func main() {
 
 	router := mux.NewRouter()
 	routes.Router(router)
+	_ = godotenv.Load()
 
-	log.Println("Server is running at PORT:8080")
+	log.Println("I Love You :8080")
 	http.ListenAndServe(":8080", router)
 }

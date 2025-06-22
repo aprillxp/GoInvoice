@@ -33,6 +33,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	}
 	if err := database.DB.Create(&user).Error; err != nil {
 		http.Error(w, "Failed to register user", http.StatusInternalServerError)
+		return
 	}
 
 	w.WriteHeader(http.StatusCreated)
