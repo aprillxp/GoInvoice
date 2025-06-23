@@ -1,6 +1,7 @@
 package database
 
 import (
+	"api/models"
 	"log"
 	"os"
 
@@ -20,4 +21,7 @@ func ConnectDB() {
 		log.Fatal("DB connect error:", err)
 	}
 	log.Println("Connected to DB")
+
+	_ = DB.Migrator().DropTable(&models.Invoice{})
+	DB.AutoMigrate(&models.User{}, &models.Invoice{})
 }

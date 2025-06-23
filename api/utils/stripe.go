@@ -1,13 +1,15 @@
 package utils
 
 import (
+	"fmt"
+
 	"github.com/stripe/stripe-go/v78"
 	"github.com/stripe/stripe-go/v78/checkout/session"
 
 	"os"
 )
 
-func StripeSession(amount int64) (string, error) {
+func StripeSession(amount int64, invoiceID uint) (string, error) {
 	stripe.Key = os.Getenv("STRIPE_SECRET_KEY")
 
 	params := &stripe.CheckoutSessionParams{
@@ -25,6 +27,9 @@ func StripeSession(amount int64) (string, error) {
 		Mode:       stripe.String("payment"),
 		SuccessURL: stripe.String("http://localhost:8080/success"),
 		CancelURL:  stripe.String("http://localhost:8080/cancel"),
+		Metadata: map[string]string{
+			"invoice_id": fmt.Sprintf("%d", invoiceID),
+		},
 	}
 
 	s, err := session.New(params)

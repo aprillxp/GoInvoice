@@ -2,6 +2,7 @@ package routes
 
 import (
 	"api/controllers"
+	handlers "api/handlers/stripe"
 	"api/middleware"
 
 	"github.com/gorilla/mux"
@@ -25,5 +26,8 @@ func Router(router *mux.Router) {
 	router.HandleFunc("/invoices/", controllers.CreateInvoice).Methods("POST")
 	router.HandleFunc("/invoices/{id}", controllers.UpdateInvoice).Methods("PUT")
 	router.HandleFunc("/invoices/{id}", controllers.DeleteInvoice).Methods("DELETE")
+
+	// Webhook
+	router.HandleFunc("/webhook", handlers.StripeWebhook).Methods("POST")
 
 }

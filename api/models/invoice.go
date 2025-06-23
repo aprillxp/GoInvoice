@@ -5,7 +5,7 @@ import "time"
 type Invoice struct {
 	ID        uint `gorm:"primaryKey"`
 	UserID    uint
-	Amount    float64
+	Amount    int64
 	DueDate   time.Time
 	Paid      bool
 	CreatedAt time.Time
