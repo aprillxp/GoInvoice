@@ -6,6 +6,7 @@ import (
 	"api/utils"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gorilla/context"
@@ -60,7 +61,7 @@ func CreateInvoice(w http.ResponseWriter, r *http.Request) {
 	var user models.User
 	if err := database.DB.First(&user, userID).Error; err == nil {
 		for _, invoice := range result {
-			body := fmt.Sprintf("An invoice of Rp%.2f has been created.", invoice.Amount)
+			body := fmt.Sprintf("An invoice of Rp%.2f has been created.", float64(invoice.Amount))
 			utils.SendInvoiceMail(user.Email, "New invoice", body)
 		}
 	}
@@ -73,18 +74,26 @@ func CreateInvoice(w http.ResponseWriter, r *http.Request) {
 
 func UpdateInvoice(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
-	var invoiceID []models.Invoice
-	if err := database.DB.First(&invoiceID, id).Error; err != nil {
+
+	var invoice models.Invoice
+	if err := database.DB.First(&invoice, id).Error; err != nil {
 		http.Error(w, "Invoice not found", http.StatusNotFound)
 		return
 	}
-	if err := json.NewDecoder(r.Body).Decode(&invoiceID); err != nil {
+
+	var updates map[string]any
+	if err := json.NewDecoder(r.Body).Decode(&updates); err != nil {
+		log.Println("Decode error:", err)
 		http.Error(w, "Invalid input", http.StatusBadRequest)
 		return
 	}
 
-	database.DB.Save(&invoiceID)
-	json.NewEncoder(w).Encode(invoiceID)
+	if err := database.DB.Model(&invoice).Updates(updates).Error; err != nil {
+		http.Error(w, "Failed to update invoice", http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(invoice)
 }
 
 func DeleteInvoice(w http.ResponseWriter, r *http.Request) {

@@ -23,7 +23,14 @@ func Authorization(next http.Handler) http.Handler {
 			return
 		}
 
-		context.Set(r, "user_id", claims["user_id"])
+		userIDFloat, ok := claims["user_id"].(float64)
+		if !ok {
+			http.Error(w, "Invalid user ID in token", http.StatusUnauthorized)
+			return
+		}
+		userID := uint(userIDFloat)
+
+		context.Set(r, "user_id", userID)
 		next.ServeHTTP(w, r)
 	})
 }

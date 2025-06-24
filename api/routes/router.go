@@ -10,24 +10,25 @@ import (
 
 func Router(router *mux.Router) {
 	// Public routes
-	router.HandleFunc("/register", controllers.Register).Methods("POST")
-	router.HandleFunc("/login", controllers.Login).Methods("POST")
+	router.HandleFunc("/register", controllers.Register).Methods("POST") // ok
+	router.HandleFunc("/login", controllers.Login).Methods("POST")       // ok
 
 	// Middleware / Protected routes
 	secured := router.PathPrefix("/api").Subrouter()
 	secured.Use(middleware.Authorization)
 
 	// User (secured)
-	secured.HandleFunc("/users", controllers.GetUsers).Methods("GET")
+	secured.HandleFunc("/users", controllers.GetUsers).Methods("GET") // ok
 
 	// Invoice (secured)
-	router.HandleFunc("/invoices", controllers.GetInvoices).Methods("GET")
-	router.HandleFunc("/invoices/{id}", controllers.GetInvoiceByID).Methods("GET")
-	router.HandleFunc("/invoices/", controllers.CreateInvoice).Methods("POST")
-	router.HandleFunc("/invoices/{id}", controllers.UpdateInvoice).Methods("PUT")
-	router.HandleFunc("/invoices/{id}", controllers.DeleteInvoice).Methods("DELETE")
+	secured.HandleFunc("/invoices", controllers.GetInvoices).Methods("GET")           // ok
+	secured.HandleFunc("/invoices/{id}", controllers.GetInvoiceByID).Methods("GET")   // ok
+	secured.HandleFunc("/invoices", controllers.CreateInvoice).Methods("POST")        // ok
+	secured.HandleFunc("/invoices/{id}", controllers.UpdateInvoice).Methods("PUT")    // ok
+	secured.HandleFunc("/invoices/{id}", controllers.DeleteInvoice).Methods("DELETE") // ok
 
 	// Webhook
-	router.HandleFunc("/webhook", handlers.StripeWebhook).Methods("POST")
+	secured.HandleFunc("/pay", handlers.PaymentHandler).Methods("POST")
+	secured.HandleFunc("/webhook", handlers.StripeWebhook).Methods("POST")
 
 }

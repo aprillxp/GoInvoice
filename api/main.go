@@ -20,6 +20,6 @@ func main() {
 	routes.Router(router)
 	_ = godotenv.Load()
 
-	log.Println("I Love You :8080")
+	log.Println("I Love You 2210")
 	http.ListenAndServe(":8080", router)
 }

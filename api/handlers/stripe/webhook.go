@@ -44,7 +44,7 @@ func StripeWebhook(w http.ResponseWriter, r *http.Request) {
 				if err := database.DB.First(&invoice, invoiceID).Error; err == nil {
 					invoice.Paid = true
 					database.DB.Save(&invoice)
-					log.Printf("Payment success for session", session.ID)
+					log.Println("Payment success for session", session.ID)
 				}
 			}
 		}
