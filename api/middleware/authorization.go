@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"api/utils"
+	"log"
 	"net/http"
 	"strings"
 
@@ -9,6 +10,8 @@ import (
 )
 
 func Authorization(next http.Handler) http.Handler {
+	log.Println("🔐 Authorization middleware executed")
+
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		authHeader := r.Header.Get("Authorization")
 		if authHeader == "" {

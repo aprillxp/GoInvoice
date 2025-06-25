@@ -21,7 +21,7 @@ func ConnectDB() {
 	if err != nil {
 		log.Fatal("DB connect error:", err)
 	}
-	log.Println("✅ Connected to DB")
+	log.Println("✅ Connected to Database")
 
 	// hanya migrasi tanpa drop table
 	if err := DB.AutoMigrate(&models.User{}, &models.Invoice{}); err != nil {

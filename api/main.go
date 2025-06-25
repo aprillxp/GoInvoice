@@ -21,5 +21,6 @@ func main() {
 	_ = godotenv.Load()
 
 	log.Println("I Love You 2210")
-	http.ListenAndServe(":8080", router)
+	log.Fatal(http.ListenAndServe(":8080", router))
+
 }

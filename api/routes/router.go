@@ -9,9 +9,12 @@ import (
 )
 
 func Router(router *mux.Router) {
+
 	// Public routes
 	router.HandleFunc("/register", controllers.Register).Methods("POST") // ok
 	router.HandleFunc("/login", controllers.Login).Methods("POST")       // ok
+
+	router.HandleFunc("/webhook", handlers.StripeWebhook).Methods("POST") // ok
 
 	// Middleware / Protected routes
 	secured := router.PathPrefix("/api").Subrouter()
@@ -28,7 +31,6 @@ func Router(router *mux.Router) {
 	secured.HandleFunc("/invoices/{id}", controllers.DeleteInvoice).Methods("DELETE") // ok
 
 	// Webhook
-	secured.HandleFunc("/pay", handlers.PaymentHandler).Methods("POST")
-	secured.HandleFunc("/webhook", handlers.StripeWebhook).Methods("POST")
+	secured.HandleFunc("/pay", handlers.PaymentHandler).Methods("POST") // ok
 
 }

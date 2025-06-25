@@ -20,15 +20,31 @@ func StripeWebhook(w http.ResponseWriter, r *http.Request) {
 	r.Body = http.MaxBytesReader(w, r.Body, MaxBodyBytes)
 	payload, err := io.ReadAll(r.Body)
 	if err != nil {
+		log.Println("❌ Error reading body:", err)
 		http.Error(w, "Request body read error", http.StatusServiceUnavailable)
 		return
 	}
 
 	endPointSecret := os.Getenv("STRIPE_WEBHOOK_SECRET")
-	sigHeader := r.Header.Get("Stripe-Signature")
+	if endPointSecret == "" {
+		log.Println("❌ STRIPE_WEBHOOK_SECRET not set")
+		http.Error(w, "Secret not configured", http.StatusBadRequest)
+		return
+	}
 
-	event, err := webhook.ConstructEvent(payload, sigHeader, endPointSecret)
+	sigHeader := r.Header.Get("Stripe-Signature")
+	if sigHeader == "" {
+		log.Println("❌ Missing Stripe-Signature header")
+		http.Error(w, "Missing signature", http.StatusBadRequest)
+		return
+	}
+
+	event, err := webhook.ConstructEventWithOptions(payload, sigHeader, endPointSecret, webhook.ConstructEventOptions{
+		IgnoreAPIVersionMismatch: true,
+	})
+
 	if err != nil {
+		log.Println("❌ Webhook verification failed:", err)
 		http.Error(w, "Webhook verification failed", http.StatusBadRequest)
 		return
 	}
@@ -53,4 +69,5 @@ func StripeWebhook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
+
 }
