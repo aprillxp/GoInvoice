@@ -16,6 +16,9 @@ func Router(router *mux.Router) {
 
 	router.HandleFunc("/webhook", handlers.StripeWebhook).Methods("POST") // ok
 
+	// testing email
+	router.HandleFunc("/sendmail", controllers.TestSendgrid).Methods("POST")
+
 	// Middleware / Protected routes
 	secured := router.PathPrefix("/api").Subrouter()
 	secured.Use(middleware.Authorization)
