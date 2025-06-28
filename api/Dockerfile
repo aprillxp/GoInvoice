@@ -1,10 +1,33 @@
-FROM golang:1.21-alpine
-WORKDIR /api
-RUN apk add --no-cache git
-COPY go.mod go.sum ./
-RUN go mod download
-COPY . .
-RUN go build -o main .
-EXPOSE 8080
-CMD ["./main"]
+# syntax=docker/dockerfile:1
 
+# Build stage
+FROM golang:1.21-alpine AS build
+WORKDIR /app
+
+# Install git for Go modules that need it
+RUN apk add --no-cache git
+
+# Copy go.mod & go.sum
+COPY go.mod go.sum ./
+
+# Download dependencies
+RUN go mod download
+
+# Copy entire project
+COPY . .
+
+# Build binary
+RUN go build -o main .
+
+# Final stage (minimal)
+FROM alpine:latest
+RUN apk --no-cache add ca-certificates
+
+WORKDIR /root/
+COPY --from=build /app/main .
+
+# Expose port
+EXPOSE 8080
+
+# Run binary
+CMD ["./main"]
