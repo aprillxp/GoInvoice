@@ -17,7 +17,7 @@ RUN go mod download
 COPY . .
 
 # Build binary
-RUN go build -o main .
+RUN go build -o main ./cmd/api
 
 # Final stage (minimal)
 FROM alpine:latest
