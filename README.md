@@ -44,12 +44,15 @@ Railway: As the deployment platform
 
 
 📦 Getting Started (Local)
+
 git clone https://github.com/<your-username>/goinvoice.git
 cd goinvoice
 go mod tidy
 go run main.go
 
+
 Make sure to set your environment variables (or use a .env file):
+
 DATABASE_URL=postgres://<user>:<password>@<host>:<port>/<db>?sslmode=disable
 SENDGRID_API_KEY=...
 STRIPE_SECRET_KEY=...
@@ -57,15 +60,21 @@ JWT_SECRET=...
 APP_ENV=...
 
 🚀 Docker Usage
+
 docker build -t goinvoice .
 docker run -p 8080:8080 goinvoice
 
 🎯 Roadmap
  CRUD Invoice API
+
  JWT Authentication
+
  SendGrid Email Integration
+
  Stripe Payment Integration
+
  Stripe webhook to automatically send email after payment success
+
  Frontend in React (handled by collaborator)
 
 📝 License
