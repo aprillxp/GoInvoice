@@ -29,11 +29,17 @@ Live deployment on Railway with CI/CD
 
 🛠️ Tech Stack
 Golang: Gin HTTP framework, GORM ORM
+
 PostgreSQL: Relational database
+
 SendGrid: For sending invoice emails
+
 Stripe: For payment processing
+
 JWT & Bcrypt: For secure user authentication
+
 Docker: For containerization
+
 Railway: As the deployment platform
 
 
