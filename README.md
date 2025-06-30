@@ -3,6 +3,7 @@ GoInvoice is a REST API backend application built with Golang to help businesses
 It comes with powerful features like invoice management, secure authentication, email notifications, and payment processing.
 
 ✨ Key Features
+
 ✅ User Authentication
 Register & login with password hashing (bcrypt)
 Secure JWT-based authentication middleware
